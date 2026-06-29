@@ -40,7 +40,10 @@ Every AI feature runs through the exact same planning pipeline as the production
 
 To use your own calendar instead, choose **"Connect Google Calendar."**
 
-<!-- Add screenshots or a short GIF of the Dashboard / Day / Recovery / Reflection pages here before submitting. -->
+<img width="1900" height="867" alt="image" src="https://github.com/user-attachments/assets/11690a40-0c42-4d49-a388-742d2c5facce" />
+<img width="1890" height="860" alt="image" src="https://github.com/user-attachments/assets/6adee2f7-ef74-43f3-bc83-c52671909dd7" />
+<img width="1895" height="862" alt="image" src="https://github.com/user-attachments/assets/e5de53d4-812b-419b-865d-5db12101f4aa" />
+<img width="1892" height="797" alt="image" src="https://github.com/user-attachments/assets/02c3b775-696f-4452-b1e0-5303f3690f98" />
 
 ---
 
