@@ -1,7 +1,5 @@
 # Momentum — Project Description
 
-*(Paste each section below into your Google Doc. Headings included so you can use Doc's heading styles directly.)*
-
 ---
 
 ## Problem Statement Selected
