@@ -1,67 +1,67 @@
 # Momentum
 
-Momentum is an **AI Executive Assistant** built for the Google AI Hackathon
-that proactively helps users finish work before deadlines by continuously
-observing, planning, learning, and adapting — not a calendar, not a task
-manager, not a reminder app.
+> **An AI Executive Assistant that helps you finish your work before deadlines—not just remind you about them.**
 
-**Live demo:** https://momentum-5f290.web.app
+Momentum was built to solve a simple problem:
 
-<!-- Add a hero screenshot or short GIF of the Dashboard here before submitting. -->
+Traditional productivity apps tell you **what** you need to do.
 
-Momentum observes your calendar and workload, predicts risk, builds a
-dependency-aware execution strategy around your real commitments, learns
-from how you actually work, and adapts the plan as the day unfolds. The
-loop: **Observe → Predict → Plan → Execute → Reflect → Learn → Adapt.**
+Momentum figures out **how you'll actually get it done.**
 
-## Evaluate it in under a minute
+Instead of acting like a calendar or task manager, Momentum continuously observes your workload, predicts risk, builds a dependency-aware execution strategy around your real commitments, learns from your behaviour over time, and replans automatically as your day changes.
 
-Open the [live demo](https://momentum-5f290.web.app) and click **Try
-Interactive Demo Workspace** on the landing page — a realistic,
-already-learned-from workspace (several weeks of execution history,
-behavioural memory, and reflections) with **no Google sign-in required**.
-Every feature works identically to the production path; only the data
-source differs. **Connect Google Calendar** is the production path for a
-user's own real schedule.
+Its planning loop is:
 
-<!-- Add screenshots of Dashboard / Day / Recovery / Reflection here. -->
+**Observe → Predict → Plan → Execute → Reflect → Learn → Adapt**
 
-## Run locally
+---
 
-```bash
-npm install
-cp .env.example .env.local   # fill in real Firebase + Gemini values
-npm run dev
-```
+# Try Momentum in under a minute
 
-## Build
+### Live Demo
 
-```bash
-npm run build
-```
+**https://momentum-5f290.web.app**
 
-## Deploy
+Click **"Try Interactive Demo Workspace"** on the landing page.
 
-See [DEPLOY.md](./DEPLOY.md) — covers both the Firebase Hosting path used
-for the live demo above and the Cloud Run path (Dockerfile + Cloud Build).
+The Demo Workspace contains:
 
-## Stack
+* realistic Google Calendar events
+* several weeks of execution history
+* behavioural memory already learned from past work
+* previous reflections
+* automatic replanning
+* recovery planning
+* execution tracking
 
-- React 18 + TypeScript + Vite, Tailwind CSS, Framer Motion
-- Firebase Auth (Google OAuth) + Cloud Firestore
-- Google Calendar API
-- Gemini API, with a fully deterministic local fallback for every AI agent
-  (the product never goes blank if Gemini is unavailable)
-- Deployed on Firebase Hosting / Google Cloud Run
+No Google sign-in is required.
 
-## Architecture
+Every AI feature runs through the exact same planning pipeline as the production version—the only difference is the data source.
 
-Behavioural memory, risk assessment, the dependency-aware task graph,
-execution tracking, reflection, and recovery all run through **one
-orchestrator pipeline** — every page (Dashboard, Day, Calendar, Recovery,
-Why, Reflection) renders the same planner output rather than deriving its
-own logic. Demo Workspace and Google Calendar are two interchangeable data
-providers feeding that same pipeline — full detail in [ARCHITECTURE.md](./ARCHITECTURE.md).
+To use your own calendar instead, choose **"Connect Google Calendar."**
+
+<!-- Add screenshots or a short GIF of the Dashboard / Day / Recovery / Reflection pages here before submitting. -->
+
+---
+
+# Key Features
+
+* AI Executive Assistant (not a reminder app)
+* Google Calendar understanding
+* Dependency-aware task graph generation
+* Intelligent execution scheduling
+* Continuous replanning
+* Behavioural learning engine
+* Execution tracking
+* Guided reflections
+* Recovery planning
+* Explainable AI decisions ("Why this?", "Why now?")
+* Gemini-powered reasoning with deterministic local fallback
+* Interactive Demo Workspace for instant evaluation
+
+---
+
+# How Momentum Works
 
 ```mermaid
 graph TD
@@ -78,17 +78,88 @@ graph TD
     K --> F
 ```
 
-## Project description
+---
 
-See [PROJECT_DESCRIPTION.md](./PROJECT_DESCRIPTION.md) for the problem
-statement, solution overview, key features, and technologies used (same
-content submitted as the Google Doc).
+# Tech Stack
+
+### Frontend
+
+* React 18
+* TypeScript
+* Vite
+* Tailwind CSS
+* Framer Motion
+
+### Backend & Infrastructure
+
+* Firebase Authentication
+* Cloud Firestore
+* Google Calendar API
+* Gemini API
+* Docker
+* Nginx
+* Google Cloud Run
+* Firebase Hosting
 
 ---
 
-### Built for the Google AI Hackathon
+# Architecture
 
-**Problem statement: The Last-Minute Life Saver**
+Momentum has **one planning pipeline**.
 
-An AI Executive Assistant that helps people complete work before deadlines,
-instead of simply reminding them.
+Every page in the application (Dashboard, Day, Calendar, Recovery, Why, Reflection) renders the exact same planner output.
+
+No page computes its own schedule independently.
+
+Demo Workspace and Google Calendar are simply two interchangeable data providers feeding the same orchestration engine.
+
+See **ARCHITECTURE.md** for the full system design.
+
+---
+
+# Running Locally
+
+```bash
+npm install
+
+cp .env.example .env.local
+
+# Add Firebase and Gemini credentials
+
+npm run dev
+```
+
+---
+
+# Production Build
+
+```bash
+npm run build
+```
+
+---
+
+# Deployment
+
+See **DEPLOY.md** for the complete deployment guide.
+
+The live demo above is deployed on **Firebase Hosting** (no billing account required). The project is also containerised with Docker for deployment to **Google Cloud Run** — both paths are documented in DEPLOY.md.
+
+---
+
+# Project Documentation
+
+See **PROJECT_DESCRIPTION.md** for:
+
+* Problem Statement
+* Solution Overview
+* Architecture
+* Key Features
+* Google Technologies Used
+* Technical Design
+
+---
+
+Built for the **Google AI Hackathon**.
+
+**Problem statement: The Last-Minute Life Saver** — an AI Executive Assistant that helps people complete work before deadlines, instead of simply reminding them.
