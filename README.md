@@ -16,7 +16,7 @@ Its planning loop is:
 
 ---
 
-# 🚀 Try Momentum in under a minute
+# Try Momentum in under a minute
 
 ### Live Demo
 
@@ -42,7 +42,7 @@ To use your own calendar instead, choose **"Connect Google Calendar."**
 
 ---
 
-# ✨ Key Features
+# Key Features
 
 * AI Executive Assistant (not a reminder app)
 * Google Calendar understanding
@@ -59,7 +59,7 @@ To use your own calendar instead, choose **"Connect Google Calendar."**
 
 ---
 
-# 🧠 How Momentum Works
+# How Momentum Works
 
 Google Calendar + Firestore
 
@@ -101,7 +101,7 @@ Adaptive Replanning
 
 ---
 
-# 🛠 Tech Stack
+# Tech Stack
 
 ### Frontend
 
@@ -124,7 +124,7 @@ Adaptive Replanning
 
 ---
 
-# 🏗 Architecture
+# Architecture
 
 Momentum has **one planning pipeline**.
 
@@ -152,7 +152,7 @@ npm run dev
 
 ---
 
-# 📦 Production Build
+# Production Build
 
 ```bash
 npm run build
@@ -160,7 +160,7 @@ npm run build
 
 ---
 
-# 🚀 Deployment
+# Deployment
 
 See **DEPLOY.md** for the complete deployment guide.
 
@@ -168,7 +168,7 @@ The project is containerised with Docker and deployed to Google Cloud Run, with 
 
 ---
 
-# 📄 Project Documentation
+# Project Documentation
 
 See **PROJECT_DESCRIPTION.md** for:
 
