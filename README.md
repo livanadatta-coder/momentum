@@ -1,6 +1,6 @@
 # Momentum
 
-> **An AI Executive Assistant that helps you finish your work before deadlines—not just remind you about them.**
+> **An AI Executive Assistant that helps you finish your work before deadlines, not just remind you about them.**
 
 Momentum was built to solve a simple problem:
 
@@ -36,7 +36,7 @@ The Demo Workspace contains:
 
 No Google sign-in is required.
 
-Every AI feature runs through the exact same planning pipeline as the production version—the only difference is the data source.
+Every AI feature runs through the exact same planning pipeline as the production version, the only difference is the data source.
 
 To use your own calendar instead, choose **"Connect Google Calendar."**
 
@@ -146,7 +146,7 @@ npm run build
 
 See **DEPLOY.md** for the complete deployment guide.
 
-The live demo above is deployed on **Firebase Hosting** (no billing account required). The project is also containerised with Docker for deployment to **Google Cloud Run** — both paths are documented in DEPLOY.md.
+The live demo above is deployed on **Firebase Hosting** (no billing account required). The project is also containerised with Docker for deployment to **Google Cloud Run**  both paths are documented in DEPLOY.md.
 
 ---
 
@@ -163,6 +163,6 @@ See **PROJECT_DESCRIPTION.md** for:
 
 ---
 
-Built for the **Google AI Hackathon**.
+Built for the **Vibe2Ship**.
 
-**Problem statement: The Last-Minute Life Saver** — an AI Executive Assistant that helps people complete work before deadlines, instead of simply reminding them.
+**Problem statement: The Last-Minute Life Saver** an AI Executive Assistant that helps people complete work before deadlines, instead of simply reminding them.
