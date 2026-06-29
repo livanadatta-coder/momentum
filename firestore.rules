@@ -1,0 +1,71 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function hasUid(uid) {
+      return request.resource.data.uid is string && request.resource.data.uid == uid;
+    }
+
+    match /users/{uid} {
+      allow read: if isOwner(uid);
+      allow create: if isOwner(uid) && hasUid(uid);
+      allow update: if isOwner(uid) && hasUid(uid);
+      allow delete: if false;
+
+      match /memory/{docId} {
+        allow read: if isOwner(uid);
+        allow create, update: if isOwner(uid);
+        allow delete: if false;
+      }
+
+      match /sessions/{sessionId} {
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid);
+        allow update: if false;
+        allow delete: if isOwner(uid);
+      }
+
+      // Daily AI session cache — one doc per calendar day (YYYY-MM-DD)
+      match /daily/{dateKey} {
+        allow read, write: if isOwner(uid);
+      }
+
+      match /tasks/{taskId} {
+        allow read, write: if isOwner(uid);
+      }
+
+      match /calendarEvents/{eventId} {
+        allow read, write: if isOwner(uid);
+      }
+
+      match /reflections/{dateKey} {
+        allow read, write: if isOwner(uid);
+      }
+
+      match /preferences/{docId} {
+        allow read, write: if isOwner(uid);
+      }
+
+      match /dailyBriefs/{dateKey} {
+        allow read, write: if isOwner(uid);
+      }
+
+      match /focusSessions/{sessionId} {
+        allow read, create, delete: if isOwner(uid);
+        allow update: if false;
+      }
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

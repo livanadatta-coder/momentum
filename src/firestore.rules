@@ -1,0 +1,132 @@
+// ============================================================================
+// Momentum — Firestore Security Rules
+//
+// Model: every piece of user data lives under users/{uid}/... and only the
+// owning, authenticated user can read or write it. No data is ever public.
+//
+// Deploy with:
+//   firebase deploy --only firestore:rules
+// (requires this file to be referenced as "firestore.rules" in firebase.json)
+// ============================================================================
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helpers ─────────────────────────────────────────────────────────
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    // ── users/{uid} — profile doc ──────────────────────────────────────
+    // Created by ensureUserProfile() on first sign-in. The uid field must
+    // always match the document's own key — a user can update their
+    // display info but can never claim someone else's uid.
+
+    match /users/{uid} {
+      allow read: if isOwner(uid);
+      allow create: if isOwner(uid) && request.resource.data.uid == uid;
+      allow update: if isOwner(uid) && request.resource.data.uid == uid;
+      allow delete: if false; // accounts are not deletable from the client
+
+      // ── users/{uid}/tasks/{taskId} — Mission ────────────────────────
+      // Doc ID must equal the mission's own id field (tasks.service.ts
+      // always writes it that way) — rule below enforces it stays true.
+
+      match /tasks/{taskId} {
+        allow read: if isOwner(uid);
+        allow create, update: if isOwner(uid) && request.resource.data.id == taskId;
+        allow delete: if isOwner(uid);
+      }
+
+      // ── users/{uid}/calendarEvents/{eventId} — CalendarEvent ────────
+
+      match /calendarEvents/{eventId} {
+        allow read: if isOwner(uid);
+        allow create, update: if isOwner(uid) && request.resource.data.id == eventId;
+        allow delete: if isOwner(uid);
+      }
+
+      // ── users/{uid}/dailyBriefs/{dateKey} — DailyBrief ──────────────
+      // Doc ID is a YYYY-MM-DD date string, not a content field, so no
+      // extra field-match check applies here.
+      //
+      // NOTE: once Cloud Functions land (per the stack roadmap), consider
+      // tightening `create`/`update` to server-only (e.g. via a custom
+      // claim) so a client can't fabricate its own daily brief instead of
+      // letting Gemini generate it. Client-write is intentional for now
+      // since there is no backend writer yet.
+
+      match /dailyBriefs/{dateKey} {
+        allow read: if isOwner(uid);
+        allow create, update: if isOwner(uid);
+        allow delete: if isOwner(uid);
+      }
+
+      // ── users/{uid}/focusSessions/{sessionId} — FocusSessionLog ─────
+
+      match /focusSessions/{sessionId} {
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid);
+        // Sessions are an append-only log — once logged, a session record
+        // shouldn't be edited, only ever superseded by a new entry.
+        allow update: if false;
+        allow delete: if isOwner(uid);
+      }
+
+      // ── users/{uid}/reflections/{dateKey} — Reflection ──────────────
+
+      match /reflections/{dateKey} {
+        allow read: if isOwner(uid);
+        allow create, update: if isOwner(uid);
+        allow delete: if isOwner(uid);
+      }
+
+      // ── users/{uid}/preferences/{docId} — UserPreferences ───────────
+      // Single doc at preferences/settings in practice, but the match
+      // pattern allows for future additional preference docs.
+
+      match /preferences/{docId} {
+        allow read: if isOwner(uid);
+        allow create, update: if isOwner(uid);
+        allow delete: if isOwner(uid);
+      }
+
+      // ── users/{uid}/memory/{docId} — BehavioralMemory ───────────────
+      // Single doc at memory/profile. Same future-hardening note as
+      // dailyBriefs above: this is AI-inferred state, written client-side
+      // only because there is no backend writer yet. Once Cloud Functions
+      // exist, prefer making this server-write-only so a user cannot
+      // fabricate their own behavioral profile to game risk/focus output.
+
+      match /memory/{docId} {
+        allow read: if isOwner(uid);
+        allow create, update: if isOwner(uid);
+        allow delete: if false;
+      }
+
+      // ── users/{uid}/sessions/{sessionId} — OrchestratorOutput ───────
+      // One per orchestrator run. Written once, never edited after.
+
+      match /sessions/{sessionId} {
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid);
+        allow update: if false;
+        allow delete: if isOwner(uid);
+      }
+    }
+
+    // ── Default deny ────────────────────────────────────────────────────
+    // Anything not explicitly matched above is inaccessible.
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
