@@ -1,5 +1,5 @@
 // ============================================================================
-// Nexus OS — Demo Workspace badge
+// Momentum — Demo Workspace badge
 //
 // "Do NOT make the demo look fake." A small, honest label — not a banner
 // apologizing for sample data — plus a one-click path to the real thing.
@@ -19,7 +19,7 @@ export function DemoWorkspaceBadge() {
     <div className="flex items-center gap-3 rounded-full border border-coral/25 bg-coral/5 px-4 py-2 text-xs text-stone">
       <span className="flex items-center gap-1.5 font-medium text-coral">
         <Sparkles className="h-3.5 w-3.5" />
-        Demo Workspace
+        Interactive Demo Workspace
       </span>
       <span className="hidden sm:inline">
         This workspace uses realistic sample data to demonstrate Momentum's AI capabilities.

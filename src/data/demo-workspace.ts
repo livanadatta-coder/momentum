@@ -1,5 +1,5 @@
 // ============================================================================
-// Nexus OS — Demo Workspace
+// Momentum — Demo Workspace
 //
 // A first-class data source, not placeholder data. This is what Google
 // Calendar mode already does mechanically: pass an empty Mission[] and let

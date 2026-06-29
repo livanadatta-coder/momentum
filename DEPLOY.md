@@ -1,27 +1,51 @@
-# Deploying Momentum to Google Cloud Run
+# Deploying Momentum
 
-Momentum is a static Vite/React SPA — Firebase Auth/Firestore and the Gemini
-API are called directly from the browser, so there's no backend service to
-deploy separately. Cloud Run just needs to serve the built `dist/` output.
+Momentum is a static Vite/React SPA — Firebase Auth, Cloud Firestore, the
+Google Calendar API, and the Gemini API are all called directly from the
+browser, so there's no backend service to deploy separately. Either deploy
+path just needs to serve the built `dist/` output.
 
 Vite env vars (`VITE_*`) are baked into the JS bundle at **build time**, not
-read at runtime — so they must be passed in as build args, not as Cloud Run
-environment variables on the running service.
+read at runtime.
 
-## 0. One-time setup
+## Services this app depends on
 
-```sh
+| Service | Used for | Config |
+|---|---|---|
+| Firebase Auth | Google OAuth sign-in | `VITE_FIREBASE_*` vars |
+| Cloud Firestore | Behavioural memory, sessions, execution history, reflections | `VITE_FIREBASE_PROJECT_ID` |
+| Google Calendar API | Reading/writing the user's real calendar | Calendar scope requested at sign-in (`src/auth/auth.service.ts`) |
+| Gemini API | Risk/Focus/Planner/Recovery/Memory agents | `VITE_GEMINI_API_KEY` |
+
+All required env vars are listed in [.env.example](./.env.example).
+
+---
+
+## Option A — Firebase Hosting (used for the live demo, no billing account needed)
+
+```bash
+npm install
+npm run build
+firebase login
+firebase deploy --only hosting
+```
+
+Prints a `https://<project-id>.web.app` URL. `*.web.app` and
+`*.firebaseapp.com` domains are auto-authorized for Firebase Auth — no
+manual step needed. This project's `firebase.json` already has a `hosting`
+block (static SPA serve + rewrite-to-`index.html` for client-side routing).
+
+## Option B — Google Cloud Run
+
+```bash
 gcloud auth login
 gcloud config set project YOUR_PROJECT_ID
 gcloud services enable run.googleapis.com cloudbuild.googleapis.com artifactregistry.googleapis.com
 ```
 
-## 1. Build the image with Cloud Build (no local Docker needed)
+Build (Cloud Build, no local Docker needed) — pull values from `.env.local`:
 
-Pull the values from your `.env.local` — same project you already use for
-the dev server.
-
-```sh
+```bash
 gcloud builds submit --config cloudbuild.yaml \
   --substitutions=\
 _VITE_FIREBASE_API_KEY="...",\
@@ -34,13 +58,9 @@ _VITE_FIREBASE_APP_MEASUREMENT_ID="...",\
 _VITE_GEMINI_API_KEY="..."
 ```
 
-This pushes `gcr.io/YOUR_PROJECT_ID/momentum:latest`.
+Deploy:
 
-(If you'd rather build locally: `docker build --build-arg VITE_FIREBASE_API_KEY=... [...] -t gcr.io/YOUR_PROJECT_ID/momentum .` then `docker push gcr.io/YOUR_PROJECT_ID/momentum`.)
-
-## 2. Deploy to Cloud Run
-
-```sh
+```bash
 gcloud run deploy momentum \
   --image gcr.io/YOUR_PROJECT_ID/momentum:latest \
   --platform managed \
@@ -49,22 +69,23 @@ gcloud run deploy momentum \
   --port 8080
 ```
 
-`gcloud` prints the public `*.run.app` URL when this finishes — that's your
-submission link.
+**Manual step required for this path**: Cloud Run's `*.run.app` domain is
+NOT auto-authorized for Firebase Auth. Add it at **Firebase Console →
+Authentication → Settings → Authorized domains**.
 
-## 3. Required manual step — Firebase Auth authorized domain
+Note: Cloud Run requires a billing account linked to the GCP project (Cloud
+Build/Cloud Run/Artifact Registry are paid APIs, even though usage at this
+scale is free-tier). In some regions Google requires a one-time refundable
+prepayment before the free trial activates — Firebase Hosting (Option A)
+avoids this entirely and is what the submitted live demo uses.
 
-Google sign-in (`signInWithPopup`) will fail on the deployed URL until you
-allow it:
+---
 
-**Firebase Console → Authentication → Settings → Authorized domains → Add domain** →
-paste the `*.run.app` domain Cloud Run gave you.
+## Redeploying after a code change
 
-## 4. Redeploying after a code change
-
-Re-run step 1 (rebuilds the image with the same substitutions) then step 2
-(`gcloud run deploy` with the same image tag) — or bump the tag
-(`:v2`, etc.) if you want to keep old revisions around.
+- Firebase: re-run `npm run build` then `firebase deploy --only hosting`.
+- Cloud Run: re-run the build step then the deploy step (same image tag
+  overwrites, or bump the tag for a new revision).
 
 ## Known limitation (by design, not a deploy bug)
 
@@ -73,4 +94,4 @@ backend to proxy it through — this mirrors the existing architecture
 (`calendar.service.ts`'s comments already call out the no-backend choice).
 Acceptable for a hackathon submission; restrict the key's API scope in
 Google Cloud Console (Gemini API only, HTTP referrer restriction to your
-`*.run.app` domain) rather than leaving it fully open.
+deployed domain) rather than leaving it fully open.

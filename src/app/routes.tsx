@@ -93,7 +93,7 @@ function LandingPage() {
               <span className="text-xs font-semibold uppercase tracking-[0.14em]">Recommended</span>
             </div>
             <h2 className="font-serif text-2xl leading-tight tracking-[-0.02em]">
-              Try Demo Workspace
+              Try Interactive Demo Workspace
             </h2>
             <p className="mt-3 flex-1 text-sm leading-7 text-stone">
               Experience Momentum with a realistic workspace that showcases AI planning,
