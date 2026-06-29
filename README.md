@@ -138,7 +138,7 @@ See **ARCHITECTURE.md** for the full system design.
 
 ---
 
-# ▶ Running Locally
+# Running Locally
 
 ```bash
 npm install
