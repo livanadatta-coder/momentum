@@ -163,6 +163,4 @@ See **PROJECT_DESCRIPTION.md** for:
 
 ---
 
-Built for the **Vibe2Ship**.
-
-**Problem statement: The Last-Minute Life Saver** an AI Executive Assistant that helps people complete work before deadlines, instead of simply reminding them.
+Built by Livana Datta
